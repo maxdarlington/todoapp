@@ -1,7 +1,8 @@
 class Task {
-  constructor(id, title, category) {
+  constructor(id, title, category, description) {
     this.id = id;
     this.title = title;
+    this.description = description;
     this.complete = false;
     this.category = category;
     this.createdAt = new Date().toISOString();
@@ -22,5 +23,9 @@ class Task {
 
   updateDueDate(dueDateInput) {
     this.dueDate = dueDateInput;
+  }
+
+  updateDescription(descriptionInput) {
+    this.description = descriptionInput;
   }
 }

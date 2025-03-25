@@ -28,7 +28,7 @@ class TaskList {
     this.addButton.textContent = "Add Task";
     this.addButton.className = "add-task-button";
     this.addButton.addEventListener("click", () => {
-      this.validateAndCreateTask();
+      this.createTask(this.titleInput.value, this.categoryInput.value);
     });
 
     // Append elements to input container
@@ -44,52 +44,6 @@ class TaskList {
     this.container.appendChild(this.inputContainer);
     this.container.appendChild(this.tasksContainer);
     document.body.appendChild(this.container);
-  }
-
-  validateAndCreateTask() {
-    const title = this.titleInput.value.trim();
-    const category = this.categoryInput.value.trim();
-
-    // Reset any previous error states
-    this.titleInput.classList.remove("input-error");
-    this.categoryInput.classList.remove("input-error");
-
-    let isValid = true;
-
-    if (!title) {
-      this.titleInput.classList.add("input-error");
-      this.showError("Title is required");
-      isValid = false;
-    }
-
-    if (!category) {
-      this.categoryInput.classList.add("input-error");
-      this.showError("Category is required");
-      isValid = false;
-    }
-
-    if (isValid) {
-      this.createTask(title, category);
-      this.titleInput.value = "";
-      this.categoryInput.value = "";
-      this.clearError();
-    }
-  }
-
-  showError(message) {
-    if (!this.errorDisplay) {
-      this.errorDisplay = document.createElement("div");
-      this.errorDisplay.className = "error-message";
-      this.inputContainer.appendChild(this.errorDisplay);
-    }
-    this.errorDisplay.textContent = message;
-    this.errorDisplay.style.display = "block";
-  }
-
-  clearError() {
-    if (this.errorDisplay) {
-      this.errorDisplay.style.display = "none";
-    }
   }
 
   createId() {

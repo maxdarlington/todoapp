@@ -14,26 +14,19 @@ class TaskList {
     // Create title input
     this.titleInput = document.createElement("input");
     this.titleInput.type = "text";
-    this.titleInput.placeholder = "Enter task title";
+    this.titleInput.placeholder = "Task title";
     this.titleInput.className = "task-title-input";
-
-    // Create category input
-    this.categoryInput = document.createElement("input");
-    this.categoryInput.type = "text";
-    this.categoryInput.placeholder = "Enter task category";
-    this.categoryInput.className = "task-category-input";
 
     // Create add task button
     this.addButton = document.createElement("button");
-    this.addButton.textContent = "Add Task";
-    this.addButton.className = "add-task-button";
+    this.addButton.textContent = "Create task";
+    this.addButton.className = "create-task-button";
     this.addButton.addEventListener("click", () => {
-      this.createTask(this.titleInput.value, this.categoryInput.value);
+      this.createTask(this.titleInput.value);
     });
 
     // Append elements to input container
     this.inputContainer.appendChild(this.titleInput);
-    this.inputContainer.appendChild(this.categoryInput);
     this.inputContainer.appendChild(this.addButton);
 
     // Create tasks container
@@ -47,7 +40,7 @@ class TaskList {
   }
 
   createId() {
-    let id = Math.floor(Math.random() * 900) + 100; // generates random 3-digit id
+    let id = Math.floor(Math.random() * (9999 - 1000) + 1000); // generates random 3-digit id
     if (this.tasks.find((task) => task.id === id)) {
       return this.createId();
     }
@@ -59,11 +52,29 @@ class TaskList {
     li.id = `task-${task.id}`;
     li.textContent = task.title;
     this.tasksContainer.appendChild(li);
+    li.addEventListener("click", () => {
+      if (!task.complete) {
+        task.updateComplete();
+        li.classList.add("completed");
+      } else {
+        task.updateComplete();
+        li.classList.remove("completed");
+      }
+    });
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "delete-task-button";
+    deleteButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.removeTask(task);
+      li.remove();
+    });
+    li.appendChild(deleteButton);
   }
 
-  createTask(title, category) {
+  createTask(title) {
     let id = this.createId();
-    let task = new Task(id, title, category);
+    let task = new Task(id, title);
     this.tasks.push(task);
     this.renderTask(task);
     return task;
@@ -75,21 +86,5 @@ class TaskList {
 
   completeTask(task) {
     task.updateComplete();
-  }
-
-  updateTaskTitle(task, title) {
-    task.updateTitle(title);
-  }
-
-  updateTaskCategory(task, category) {
-    task.updateCategory(category);
-  }
-
-  updateTaskDueDate(task, dueDate) {
-    task.updateDueDate(dueDate);
-  }
-
-  filterTasksByCategory(category) {
-    return this.tasks.filter((task) => task.category === category);
   }
 }
